@@ -504,10 +504,29 @@ body {
   width: 2.25rem;
   height: 2.25rem;
   border-radius: 999px;
-  color: var(--azul-700);
+  background: var(--laranja);
+  color: var(--branco);
+  transition: background-color var(--transicao), transform var(--transicao);
 }
 .busca-cabecalho > button:hover {
-  background: var(--azul-50);
+  background: #e67e00;
+  transform: scale(1.06);
+}
+
+/* a etiqueta laranja da cidade ao lado da logo: a franquia é daqui */
+.tag-cidade {
+  display: inline-block;
+  padding: 0.1875rem 0.5rem 0.25rem;
+  border-radius: var(--raio-mini);
+  background: var(--laranja);
+  color: var(--azul-950);
+  font-family: var(--font-corpo);
+  font-weight: 700;
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1;
+  transform: translateY(1px);
 }
 
 /* pílulas de filtro: contorno; a escolhida é azul cheio */
@@ -642,8 +661,33 @@ body {
   transition: background-color var(--transicao), color var(--transicao);
 }
 .porta-link > svg {
-  color: var(--branco);
+  color: var(--azul-200);
   transition: color var(--transicao), transform 220ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.porta-link[aria-current="page"] > svg {
+  color: var(--laranja);
+}
+/* o número da categoria, uma pílula miúda que acende de laranja no hover */
+.porta-numero {
+  display: none;
+  align-items: center;
+  height: 1.125rem;
+  padding: 0 0.4375rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--azul-200);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  transition: background-color var(--transicao), color var(--transicao);
+}
+/* a linha miúda da porta da loja */
+.porta-nota {
+  display: none;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--azul-300);
 }
 .porta-link::after {
   content: "";
@@ -665,13 +709,23 @@ body {
     flex-direction: row;
     gap: 0.625rem;
     min-width: 0;
-    padding: 0.875rem 1.25rem;
+    padding: 0.8125rem 1.25rem;
     font-size: 0.9375rem;
-    font-weight: 500;
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+  .porta-numero,
+  .porta-nota {
+    display: inline-flex;
   }
   .porta:hover > .porta-link,
   .porta:focus-within > .porta-link {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.06);
+  }
+  .porta:hover > .porta-link .porta-numero,
+  .porta:focus-within > .porta-link .porta-numero {
+    background: var(--laranja);
+    color: var(--azul-950);
   }
   .porta:hover > .porta-link::after,
   .porta:focus-within > .porta-link::after {

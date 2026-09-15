@@ -25,6 +25,10 @@ export type Aba = {
   icone: NomeIconeMenu;
   externa?: boolean;
   titulo?: string;
+  /* o número que aparece ao lado do nome na fila de portas */
+  total?: number;
+  /* a linha miúda embaixo do nome, só na porta da loja */
+  nota?: string;
   itens: ItemMenu[];
   colunas: 1 | 2 | 3 | 4;
 };
@@ -69,6 +73,7 @@ export function montarMenu(produtos: Produto[], linkWhats: string): Aba[] {
       chave: "colchoes",
       nome: "Colchões",
       href: "/catalogo/colchoes",
+      total: conta("colchoes"),
       icone: "colchao",
       titulo: `${conta("colchoes")} modelos`,
       colunas: 3,
@@ -84,6 +89,7 @@ export function montarMenu(produtos: Produto[], linkWhats: string): Aba[] {
       chave: "bases",
       nome: "Bases",
       href: "/catalogo/bases",
+      total: conta("bases"),
       icone: "base",
       titulo: `${conta("bases")} opções, para cada tamanho de colchão`,
       colunas: 2,
@@ -97,6 +103,7 @@ export function montarMenu(produtos: Produto[], linkWhats: string): Aba[] {
       chave: "cabeceiras",
       nome: "Cabeceiras",
       href: "/catalogo/cabeceiras",
+      total: conta("cabeceiras"),
       icone: "cabeceira",
       titulo: `${conta("cabeceiras")} opções`,
       colunas: 2,
@@ -109,6 +116,7 @@ export function montarMenu(produtos: Produto[], linkWhats: string): Aba[] {
       chave: "travesseiros",
       nome: "Travesseiros",
       href: "/catalogo/travesseiros",
+      total: conta("travesseiros"),
       icone: "travesseiro",
       titulo: `${conta("travesseiros")} modelos`,
       colunas: 2,
@@ -134,6 +142,7 @@ export function montarMenu(produtos: Produto[], linkWhats: string): Aba[] {
       nome: "A loja",
       href: "/#loja",
       icone: "loja",
+      nota: "Grageru, Aracaju",
       colunas: 1,
       itens: [
         { nome: "Endereço e como chegar", href: "/#loja", icone: "loja", nota: "Av. Tancredo Neves, 746, Grageru" },

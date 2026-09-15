@@ -67,9 +67,9 @@ export function Cabecalho({ linkWhats, aviso, menu }: { linkWhats: string; aviso
             </span>
           </button>
 
-          <Link href="/" aria-label="Ortobom Aracaju, página inicial" className="flex shrink-0 items-center gap-3">
+          <Link href="/" aria-label="Ortobom Aracaju, página inicial" className="flex shrink-0 items-center gap-2.5 lg:gap-3">
             <Logo className="h-[1.375rem] w-auto lg:h-[1.75rem]" />
-            <span className="hidden border-l border-azul-300/40 pl-3 text-[0.8125rem] font-semibold uppercase tracking-[0.08em] text-azul-300 sm:inline">Aracaju</span>
+            <span className="tag-cidade">Aracaju</span>
           </Link>
 
           <form onSubmit={buscar} role="search" className="mx-auto hidden w-full max-w-[34rem] lg:block">
@@ -112,19 +112,31 @@ export function Cabecalho({ linkWhats, aviso, menu }: { linkWhats: string; aviso
           </label>
         </form>
 
-        <nav aria-label="Portas da loja" className="border-t border-white/10">
-          <ul className="miolo faixa-scroll flex overflow-x-auto lg:grid lg:grid-cols-6 lg:overflow-visible">
-            {menu.map((aba, i) => (
-              <li key={aba.chave} className={`porta ${i > 0 ? "lg:border-l lg:border-white/10" : ""}`}>
+        {/* a fila de portas, no azul mais escuro do topo: as categorias com o
+            número de cada uma à esquerda, a loja empurrada para a direita */}
+        <nav aria-label="Portas da loja" className="escuro border-t border-white/10">
+          <ul className="miolo faixa-scroll flex overflow-x-auto lg:overflow-visible">
+            {menu.map((aba, i) => {
+              const ultima = i === menu.length - 1;
+              const rotulo = (
+                <>
+                  <Icone nome={aba.icone} className="h-7 w-7 shrink-0 lg:h-8 lg:w-8" peso={1.4} />
+                  <span className="flex flex-col items-center leading-tight lg:items-start">
+                    <span>{aba.nome}</span>
+                    {aba.nota ? <span className="porta-nota">{aba.nota}</span> : null}
+                  </span>
+                  {aba.total ? <span className="porta-numero">{aba.total}</span> : null}
+                </>
+              );
+              return (
+              <li key={aba.chave} className={`porta ${i > 0 ? "lg:border-l lg:border-white/10" : ""} ${ultima ? "lg:ml-auto lg:border-r lg:border-white/10" : ""}`}>
                 {aba.externa ? (
                   <a href={aba.href} target="_blank" rel="noreferrer" className="porta-link">
-                    <Icone nome={aba.icone} className="h-7 w-7 lg:h-8 lg:w-8" peso={1.4} />
-                    {aba.nome}
+                    {rotulo}
                   </a>
                 ) : (
                   <Link href={aba.href} className="porta-link" aria-current={atual(aba.href) ? "page" : undefined}>
-                    <Icone nome={aba.icone} className="h-7 w-7 lg:h-8 lg:w-8" peso={1.4} />
-                    {aba.nome}
+                    {rotulo}
                   </Link>
                 )}
 
@@ -159,7 +171,8 @@ export function Cabecalho({ linkWhats, aviso, menu }: { linkWhats: string; aviso
                   </ul>
                 </div>
               </li>
-            ))}
+              );
+            })}
           </ul>
         </nav>
       </div>
