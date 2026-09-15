@@ -54,12 +54,17 @@ export function CardProduto({
 
       <div className="flex flex-1 flex-col border-t border-linha px-4 pb-4 pt-3">
         {categoria ? <p className="etiqueta">{categoria.nome}</p> : null}
-        <h3 className="titulo-cartao mt-1 line-clamp-2 text-tinta">
+        {/* o nome reserva sempre duas linhas e os tamanhos uma, para os
+            cards da mesma fila fecharem retos, com o botão na mesma altura */}
+        <h3 className="titulo-cartao mt-1 line-clamp-2 min-h-[2.7em] text-tinta">
           <Link href={href} className="hover:text-azul-700">
             {produto.nome}
           </Link>
         </h3>
-        {medidas.length ? <p className="mt-1 text-[0.8125rem] text-tinta-fraca">{medidas.join(" · ").replace(/ · /g, ", ")}</p> : null}
+        <p className="mt-1 min-h-[1.25rem] truncate text-[0.8125rem] text-tinta-fraca" title={medidas.join(", ")}>
+          {medidas.slice(0, 3).join(", ")}
+          {medidas.length > 3 ? <span className="font-semibold text-azul-700"> +{medidas.length - 3}</span> : null}
+        </p>
 
         {vigente ? (
           <p className="mt-3 flex items-baseline gap-2">
@@ -70,10 +75,12 @@ export function CardProduto({
           <p className="mt-3 text-[0.875rem] font-medium text-azul-700">Consulte o valor no WhatsApp</p>
         )}
 
-        <a href={pedir} target="_blank" rel="noreferrer" className="btn btn--azul btn--pequeno mt-4 w-full">
-          <Icone nome="whats" className="h-[1.125rem] w-[1.125rem]" />
-          Pedir no WhatsApp
-        </a>
+        <div className="mt-auto pt-4">
+          <a href={pedir} target="_blank" rel="noreferrer" className="btn btn--azul btn--pequeno w-full">
+            <Icone nome="whats" className="h-[1.125rem] w-[1.125rem]" />
+            Pedir no WhatsApp
+          </a>
+        </div>
       </div>
     </article>
   );
