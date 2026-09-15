@@ -574,11 +574,12 @@ body {
   border: 1px solid var(--risco);
   border-radius: var(--raio);
   overflow: hidden;
-  transition: box-shadow var(--transicao), border-color var(--transicao);
+  transition: box-shadow var(--transicao), border-color var(--transicao), transform var(--transicao);
 }
 .cartao:hover {
   border-color: var(--cinza-300);
-  box-shadow: 0 8px 24px -12px rgba(18, 26, 43, 0.35);
+  box-shadow: 0 12px 28px -12px rgba(18, 26, 43, 0.35);
+  transform: translateY(-2px);
 }
 .bloco {
   border-radius: var(--raio);

@@ -2,11 +2,14 @@ import { Banners, type Banner } from "@/components/Banners";
 import { Certificacoes } from "@/components/Certificacoes";
 import { FaixaWhats } from "@/components/FaixaWhats";
 import { Garantias } from "@/components/Garantias";
+import { GuiaColchao } from "@/components/GuiaColchao";
 import { InfoCards } from "@/components/InfoCards";
 import { Loja } from "@/components/Loja";
+import { Numeros } from "@/components/Numeros";
 import { Portas } from "@/components/Portas";
 import { Prateleira } from "@/components/Prateleira";
 import { carregarCatalogo, obterConfig } from "@/lib/dados";
+import { nomeDoTamanho } from "@/lib/filtro";
 import { linkGeral } from "@/lib/whatsapp";
 import { configPadrao, site } from "@/data/site.config";
 
@@ -40,21 +43,29 @@ export default async function Home() {
 
   const frase = config.frase_hero || configPadrao.frase_hero;
   const fotoDe = (slug: string, n = 0) => peca(slug)?.imagens[n] ?? destaques[0]?.imagens[0];
+  /* o guia recebe só o que precisa de cada colchão: tamanhos (nome) e conforto */
+  const resumoColchoes = da("colchoes").map((p) => ({
+    slug: p.slug,
+    nome: p.nome,
+    tamanhos: [...new Set(p.tamanhos.map(nomeDoTamanho))],
+    conforto: p.atributos?.find((a) => /conforto/i.test(a.chave))?.valor ?? null,
+  }));
+  const tamanhosDeCama = new Set(da("colchoes").flatMap((p) => p.tamanhos.map(nomeDoTamanho)).filter((t) => !/berço|berco|infantil|baby/i.test(t)));
   const banners: Banner[] = [
     {
       etiqueta: "Loja Ortobom em Aracaju",
       titulo: frase,
-      texto: `Colchões de molas e espuma, bases, cabeceiras e travesseiros Ortobom, com ${colchoes.length} modelos de colchão em todos os tamanhos. Escolha aqui e feche pelo WhatsApp.`,
+      texto: `${colchoes.length} modelos de colchão Ortobom, de molas e de espuma, do solteiro ao king. Escolha aqui, mande no WhatsApp e venha deitar na loja do Grageru antes de fechar.`,
       acao: { rotulo: "Ver os colchões", href: "/catalogo/colchoes" },
       segunda: { rotulo: "Pedir no WhatsApp", href: whats, externa: true },
       imagem: fotoDe("colchao-pro-saude-nanolastic")!,
     },
     {
-      etiqueta: "Qual colchão é o seu?",
-      titulo: "Firme, macio ou híbrido: a ficha de cada modelo diz.",
-      texto: "Nível de conforto, tipo de mola ou espuma, altura e peso suportado: tudo que a Ortobom informa está na página de cada colchão, para você comparar antes de vir deitar na loja.",
-      acao: { rotulo: "Comparar os modelos", href: "/catalogo/colchoes" },
-      segunda: { rotulo: "Ver por tamanho", href: "/catalogo/colchoes?tamanho=Casal" },
+      etiqueta: "Guia da loja",
+      titulo: "Macio, firme ou híbrido? Duas escolhas e a vitrine responde.",
+      texto: "O tamanho em escala e o jeito que você dorme: o guia filtra os colchões na hora. Depois, a ficha de cada um diz altura, tipo de mola ou espuma e peso suportado.",
+      acao: { rotulo: "Fazer o guia", href: "/#escolha" },
+      segunda: { rotulo: "Ver todos os colchões", href: "/catalogo/colchoes" },
       imagem: fotoDe("colchao-liberty")!,
       escuro: true,
     },
@@ -74,6 +85,8 @@ export default async function Home() {
 
       <Garantias />
 
+      <GuiaColchao colchoes={resumoColchoes} />
+
       <Portas
         portas={[
           { nome: "Colchões", href: "/catalogo/colchoes", imagem: "/marca/cat-colchoes.png", nota: `${colchoes.length} modelos` },
@@ -87,7 +100,7 @@ export default async function Home() {
 
       <InfoCards
         cards={[
-          { titulo: "Qual colchão é o seu?", texto: "Do conforto das molas à sofisticação das espumas, o seu sono perfeito começa aqui.", acao: "Escolha o seu", href: "/catalogo/colchoes", imagem: "/marca/round-2.webp" },
+          { titulo: "Travesseiros", texto: "Látex, visco, pluma e fibra: o par certo para o seu colchão.", acao: "Escolha o seu", href: "/catalogo/travesseiros", imagem: "/marca/round-2.webp" },
           { titulo: "Bases", texto: "Estilo e funcionalidade se unem na linha de bases para cama.", acao: "Confira as opções", href: "/catalogo/bases", imagem: "/marca/round-1.webp" },
           { titulo: "Cabeceiras", texto: "Cabeceiras que combinam com o seu estilo e com o conforto do seu quarto.", acao: "Clique e descubra", href: "/catalogo/cabeceiras", imagem: "/marca/round-3.webp" },
         ]}
@@ -100,6 +113,15 @@ export default async function Home() {
       <Prateleira id="bases" titulo="Bases" subtitulo="Planas, baú e articuladas, em corino, linho, nobuck e malha." href="/catalogo/bases" verTudo={`Ver as ${bases.length}`} produtos={bases} categorias={porSlug} nomeDaPorta="bases" feminino />
 
       <Prateleira id="cabeceiras" titulo="Cabeceiras" subtitulo="Linho, veludo, corino e facto, em várias cores." href="/catalogo/cabeceiras" verTudo={`Ver as ${cabeceiras.length}`} produtos={cabeceiras} categorias={porSlug} nomeDaPorta="cabeceiras" feminino />
+
+      <Numeros
+        itens={[
+          { numero: String(colchoes.length), texto: "modelos de colchão, de molas e de espuma" },
+          { numero: String(tamanhosDeCama.size), texto: "tamanhos de cama, do solteiro ao king" },
+          { numero: String(bases.length + cabeceiras.length), texto: "bases e cabeceiras para completar o quarto" },
+          { numero: "1", texto: "WhatsApp: a loja responde com o valor e combina a entrega" },
+        ]}
+      />
 
       <Loja linkWhats={whats} horario={config.horario} />
 

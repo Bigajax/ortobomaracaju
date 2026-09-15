@@ -70,7 +70,7 @@ export const configPadrao: Record<string, string> = {
   cidade: site.cidade,
   /* frases separadas por "|": o cabeçalho reveza uma de cada vez */
   aviso_topo: "Loja Ortobom em Aracaju: Av. Pres. Tancredo Neves, 746, Grageru | Pedido e orçamento pelo WhatsApp | Retirada na loja ou entrega combinada em Aracaju | Colchões, bases, cabeceiras e travesseiros",
-  frase_hero: "Seu próximo colchão está aqui, em Aracaju.",
+  frase_hero: "Aracaju, seu próximo colchão está aqui.",
   endereco: site.endereco,
   /* a loja ainda não passou o horário: fica vazio até vir */
   horario: "",

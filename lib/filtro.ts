@@ -64,7 +64,7 @@ export function filtrar(produtos: Produto[], f: Filtros = {}): Produto[] {
 
     if (busca) {
       const campos = normalizar(
-        [p.nome, p.codigo, p.marca ?? "", p.descricao ?? "", ...p.cores].join(" "),
+        [p.nome, p.codigo, p.marca ?? "", p.descricao ?? "", ...p.cores, ...(p.atributos ?? []).map((a) => a.valor), ...p.tamanhos].join(" "),
       );
       if (!busca.split(/\s+/).every((termo) => campos.includes(termo)))
         return false;

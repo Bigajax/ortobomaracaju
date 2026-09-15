@@ -7,8 +7,8 @@ import { Icone, type NomeIcone } from "./Icones";
  * nada de "todo o Brasil", nada de "21x" sem a loja confirmar.
  */
 const ITENS: { icone: NomeIcone; titulo: string; texto: string }[] = [
-  { icone: "loja", titulo: "Loja em Aracaju", texto: "Av. Pres. Tancredo Neves, 746, Grageru" },
-  { icone: "conversa", titulo: "Pedido pelo WhatsApp", texto: "orçamento na hora, sem cadastro" },
+  { icone: "loja", titulo: "Venha deitar antes", texto: "loja no Grageru: Av. Tancredo Neves, 746" },
+  { icone: "conversa", titulo: "Fala com gente de verdade", texto: "orçamento no WhatsApp, sem cadastro" },
   { icone: "caminhao", titulo: "Entrega combinada", texto: "retirada na loja ou entrega em Aracaju" },
   { icone: "garantia", titulo: "Garantia Ortobom", texto: "produto original, com a garantia da marca" },
 ];

@@ -20,9 +20,9 @@ export function FaixaWhats({ linkWhats }: { linkWhats: string }) {
           <Icone nome="whats" className="h-12 w-12 shrink-0 text-[#25d366] sm:h-14 sm:w-14" />
           <div>
             <h2 id="titulo-faixa" className="manchete text-[clamp(1.5rem,3.2vw,2.25rem)] text-branco">
-              Pedido pelo WhatsApp
+              Escolheu? Manda no WhatsApp da loja.
             </h2>
-            <p className="mt-1 text-[0.9375rem] text-azul-200">Sem cadastro, sem carrinho: você fala com a loja.</p>
+            <p className="mt-1 text-[0.9375rem] text-azul-200">Sem cadastro, sem carrinho: quem responde é a loja do Grageru.</p>
           </div>
         </div>
 
