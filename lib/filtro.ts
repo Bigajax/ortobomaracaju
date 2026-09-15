@@ -56,6 +56,15 @@ export function filtrar(produtos: Produto[], f: Filtros = {}): Produto[] {
     if (tamanhos && !p.tamanhos.some((t) => tamanhos.includes(normalizar(nomeDoTamanho(t)))))
       return false;
 
+    if (f.atributos) {
+      for (const [chave, valores] of Object.entries(f.atributos)) {
+        if (!valores.length) continue;
+        const quer = valores.map(normalizar);
+        const tem = (p.atributos ?? []).some((a) => a.chave === chave && quer.includes(normalizar(a.valor)));
+        if (!tem) return false;
+      }
+    }
+
     const preco = precoVigente(p);
     if (f.precoMin !== undefined && (preco === null || preco < f.precoMin))
       return false;
@@ -74,6 +83,8 @@ export function filtrar(produtos: Produto[], f: Filtros = {}): Produto[] {
 
   const ordem = f.ordem ?? "recentes";
   return [...lista].sort((a, b) => {
+    if (ordem === "nome-az") return a.nome.localeCompare(b.nome, "pt-BR");
+    if (ordem === "nome-za") return b.nome.localeCompare(a.nome, "pt-BR");
     if (ordem === "menor-preco" || ordem === "maior-preco") {
       const pa = precoVigente(a);
       const pb = precoVigente(b);
@@ -103,4 +114,33 @@ export function faixaDePreco(produtos: Produto[]): [number, number] | null {
     .filter((v): v is number => v !== null);
   if (!precos.length) return null;
   return [Math.floor(Math.min(...precos)), Math.ceil(Math.max(...precos))];
+}
+
+/* as chaves da ficha que viram filtro na lateral do catálogo, nesta ordem */
+export const CHAVES_FACETA = ["Nível de Conforto", "Tipo de Colchão", "Tipos de Mola", "Tipo de Espuma", "Tecnologia", "Densidade", "Material", "Estilo", "Revestimento", "Altura dos pés"];
+
+export type Faceta = { chave: string; valores: { valor: string; total: number }[] };
+
+/**
+ * As facetas de um escopo: para cada chave da lista, os valores que
+ * existem e quantas peças têm cada um. Valores compridos (a ficha da
+ * marca às vezes traz um parágrafo no lugar de uma palavra) ficam de
+ * fora; chaves com um valor só não viram filtro.
+ */
+export function facetas(produtos: Produto[], chaves: string[] = CHAVES_FACETA): Faceta[] {
+  return chaves
+    .map((chave) => {
+      const contagem = new Map<string, number>();
+      for (const p of produtos) {
+        for (const a of p.atributos ?? []) {
+          if (a.chave !== chave || a.valor.length > 28 || a.valor === "-") continue;
+          contagem.set(a.valor, (contagem.get(a.valor) ?? 0) + 1);
+        }
+      }
+      const valores = [...contagem.entries()]
+        .sort((x, y) => y[1] - x[1] || x[0].localeCompare(y[0], "pt-BR", { numeric: true }))
+        .map(([valor, total]) => ({ valor, total }));
+      return { chave, valores };
+    })
+    .filter((f) => f.valores.length > 1);
 }

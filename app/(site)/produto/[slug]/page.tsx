@@ -3,7 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CardProduto } from "@/components/CardProduto";
 import { CompraProduto } from "@/components/CompraProduto";
+import { FichaRapida } from "@/components/FichaRapida";
 import { GaleriaProduto } from "@/components/GaleriaProduto";
+import { Icone } from "@/components/Icones";
 import { carregarCatalogo, obterConfig, obterProduto } from "@/lib/dados";
 import { nomeDoTamanho, temDesconto } from "@/lib/filtro";
 import { precoBRL } from "@/lib/formato";
@@ -55,6 +57,7 @@ export default async function PaginaProduto({ params }: Props) {
   const cheio = precoBRL(produto.preco);
   const vigente = precoBRL(produto.preco_promocional ?? produto.preco);
   const paragrafos = (produto.descricao ?? "").split("\n\n").filter(Boolean);
+  /* a abertura da marca ("Durma com Conforto e Estilo!") fica para a seção "Conheça"; aqui em cima vai o que decide */
   const ficha = [
     ...(produto.tamanhos.length ? [{ chave: "Tamanhos", valor: produto.tamanhos.map(nomeDoTamanho).join(", ") }] : []),
     ...(produto.cores.length === 1 ? [{ chave: "Cor", valor: produto.cores[0] }] : []),
@@ -62,6 +65,8 @@ export default async function PaginaProduto({ params }: Props) {
   ];
 
   const parecidos = produtos.filter((p) => p.ativo && p.id !== produto.id && p.categoria_slug === produto.categoria_slug).slice(0, 4);
+  const tecnologia = produto.atributos?.find((a) => /^tipos? de mola|^tecnologia$|^tipo de espuma$/i.test(a.chave))?.valor;
+  const quantosTamanhos = produto.tamanhos.length;
 
   const preco = produto.preco_promocional ?? produto.preco;
   const jsonLd = {
@@ -107,14 +112,23 @@ export default async function PaginaProduto({ params }: Props) {
 
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-12">
           <div>
-            <GaleriaProduto imagens={produto.imagens} nome={produto.nome} />
+            <GaleriaProduto imagens={produto.imagens} nome={produto.nome} tag={tecnologia} />
             <p className="miudo mt-3">Fotos ilustrativas da Ortobom: o colchão não inclui a base. Confira o tamanho e as medidas antes de pedir.</p>
           </div>
 
-          <div>
-            {categoria ? <p className="etiqueta">{categoria.nome} Ortobom</p> : null}
-            <h1 className="manchete mt-2 text-[clamp(1.5rem,3vw,2.125rem)] text-azul-900">{produto.nome}</h1>
-            {paragrafos[0] ? <p className="mt-3 text-[0.9375rem] leading-relaxed text-tinta-fraca">{paragrafos[0]}</p> : null}
+          <div className="pedido-fixo self-start">
+            <p className="etiqueta flex flex-wrap items-center gap-x-3 gap-y-1">
+              {categoria ? <span>{categoria.nome} Ortobom</span> : null}
+              <span className="text-cinza-500">{produto.codigo}</span>
+            </p>
+            <h1 className="manchete mt-2 text-[clamp(1.625rem,3vw,2.25rem)] text-azul-900">{produto.nome}</h1>
+            {quantosTamanhos > 1 ? (
+              <p className="mt-1.5 text-[0.9375rem] text-tinta-fraca">
+                Em {quantosTamanhos} tamanhos, de {nomeDoTamanho(produto.tamanhos[0]).toLowerCase()} a {nomeDoTamanho(produto.tamanhos[quantosTamanhos - 1]).toLowerCase()}.
+              </p>
+            ) : null}
+
+            <FichaRapida produto={produto} />
 
             <div className="mt-5 border-y border-linha py-4">
               {vigente ? (
@@ -123,27 +137,39 @@ export default async function PaginaProduto({ params }: Props) {
                   <span>{vigente}</span>
                 </p>
               ) : (
-                <p className="text-[1.0625rem] text-tinta">
+                <p className="text-[0.9375rem] leading-relaxed text-tinta">
                   <span className="font-semibold text-azul-900">Valor e condições pelo WhatsApp.</span> A loja responde na hora com o preço em Aracaju e as formas de pagamento.
                 </p>
               )}
             </div>
 
-            <div className="mt-6">
+            <div className="mt-5">
               <CompraProduto produto={produto} whatsapp={config.whatsapp} base={site.url} />
             </div>
+
+            <Link href="/#loja" className="loja-cartao group mt-4">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-azul-50 text-azul-700 transition-colors group-hover:bg-laranja group-hover:text-branco">
+                <Icone nome="loja" className="h-6 w-6" peso={1.4} />
+              </span>
+              <span className="min-w-0">
+                <span className="block text-[0.9375rem] font-bold text-azul-900 group-hover:text-azul-700">Venha deitar antes de escolher</span>
+                <span className="block text-[0.8125rem] leading-snug text-tinta-fraca">
+                  Loja Ortobom no Grageru, Av. Pres. Tancredo Neves, 746{config.horario ? `. ${config.horario}` : ""}. Retirada na loja ou entrega em Aracaju.
+                </span>
+              </span>
+            </Link>
           </div>
         </div>
 
-        {paragrafos.length > 1 || ficha.length ? (
+        {paragrafos.length || ficha.length ? (
           <div className="mt-12 grid gap-8 lg:mt-16 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-12">
-            {paragrafos.length > 1 ? (
+            {paragrafos.length ? (
               <section aria-labelledby="titulo-conheca">
                 <h2 id="titulo-conheca" className="secao">
                   Conheça o {produto.nome}
                 </h2>
                 <div className="mt-4 space-y-4">
-                  {paragrafos.slice(1).map((p, i) => (
+                  {paragrafos.map((p, i) => (
                     <p key={i} className="max-w-[64ch] text-[0.9375rem] leading-relaxed text-tinta">
                       {p}
                     </p>

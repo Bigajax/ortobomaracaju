@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import type { Imagem } from "@/lib/tipos";
 
-export function GaleriaProduto({ imagens, nome }: { imagens: Imagem[]; nome: string }) {
+export function GaleriaProduto({ imagens, nome, tag }: { imagens: Imagem[]; nome: string; tag?: string | null }) {
   const [atual, setAtual] = useState(0);
   const foto = imagens[atual];
 
@@ -31,6 +31,7 @@ export function GaleriaProduto({ imagens, nome }: { imagens: Imagem[]; nome: str
       ) : null}
 
       <div className="foto aspect-square w-full border border-linha">
+        {tag ? <span className="tag tag--verde absolute left-4 top-4 z-[1]">{tag}</span> : null}
         <Image
           key={foto.url}
           src={foto.url}

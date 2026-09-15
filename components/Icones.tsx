@@ -22,6 +22,7 @@ export type NomeIcone =
   | "seta"
   | "seta-esq"
   | "fechar"
+  | "check"
   | "pino";
 
 const TRACOS: Record<Exclude<NomeIcone, "whats">, React.ReactNode> = {
@@ -108,6 +109,7 @@ const TRACOS: Record<Exclude<NomeIcone, "whats">, React.ReactNode> = {
   seta: <path d="M9.5 6l6 6-6 6" />,
   "seta-esq": <path d="M14.5 6l-6 6 6 6" />,
   fechar: <path d="M6 6l12 12M18 6L6 18" />,
+  check: <path d="M5 12.5l4.5 4.5L19 7.5" />,
   pino: (
     <>
       <path d="M12 21s-6-5.5-6-11a6 6 0 0 1 12 0c0 5.5-6 11-6 11z" />

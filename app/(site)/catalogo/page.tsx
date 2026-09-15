@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { CabecalhoCatalogo } from "@/components/CabecalhoCatalogo";
 import { Catalogo } from "@/components/Catalogo";
 import { carregarCatalogo, obterConfig } from "@/lib/dados";
 import { linkGeral } from "@/lib/whatsapp";
@@ -9,22 +10,24 @@ export const metadata: Metadata = {
   alternates: { canonical: "/catalogo" },
 };
 
-export default async function PaginaCatalogo({ searchParams }: { searchParams: Promise<{ busca?: string }> }) {
+export default async function PaginaCatalogo({ searchParams }: { searchParams: Promise<{ busca?: string; tamanho?: string }> }) {
   const [{ categorias, produtos }, config, sp] = await Promise.all([carregarCatalogo(), obterConfig(), searchParams]);
 
   const pecas = produtos.filter((p) => p.ativo);
   const categoriasDaLoja = categorias.filter((c) => c.ativo);
+  const conta = (slug: string) => pecas.filter((p) => p.categoria_slug === slug).length;
 
   return (
     <>
-      <header className="miolo pb-6 pt-8 lg:pb-8 lg:pt-12">
-        <p className="etiqueta">Ortobom Aracaju</p>
-        <h1 className="manchete mt-2 text-[clamp(1.75rem,4vw,2.5rem)] text-azul-900">Catálogo</h1>
-        <p className="falada mt-2 max-w-[52ch] text-[1.0625rem] text-tinta-fraca">
-          {pecas.length} produtos Ortobom. Escolha o modelo e o tamanho e peça pelo WhatsApp; a loja responde com o valor.
-        </p>
-      </header>
-      <Catalogo produtos={pecas} categorias={categoriasDaLoja} buscaInicial={sp.busca ?? ""} linkWhats={linkGeral(config.whatsapp)} />
+      <CabecalhoCatalogo
+        titulo="Catálogo"
+        texto={`${conta("colchoes")} colchões, ${conta("bases")} bases, ${conta("cabeceiras")} cabeceiras e ${conta("travesseiros")} travesseiros Ortobom. Escolha o modelo e o tamanho e peça pelo WhatsApp: a loja responde com o valor.`}
+        total={pecas.length}
+        unidade={["produto", "produtos"]}
+        imagens={["/marca/cat-colchoes.png", "/marca/cat-bases.png", "/marca/cat-cabeceiras.png", "/marca/cat-travesseiros.png"]}
+        base="/catalogo"
+      />
+      <Catalogo produtos={pecas} categorias={categoriasDaLoja} buscaInicial={sp.busca ?? ""} tamanhoInicial={sp.tamanho ?? ""} linkWhats={linkGeral(config.whatsapp)} />
     </>
   );
 }

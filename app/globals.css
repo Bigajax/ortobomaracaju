@@ -560,6 +560,186 @@ body {
   padding: 0.625rem 1rem;
   border-radius: var(--raio-botao);
 }
+/* as pílulas sobre o azul do topo do catálogo: contorno claro, a ativa em laranja */
+.chip--claro {
+  border-color: rgba(255, 255, 255, 0.3);
+  color: var(--branco);
+}
+.chip--claro:hover {
+  border-color: var(--branco);
+  color: var(--branco);
+  background: rgba(255, 255, 255, 0.08);
+}
+.chip--laranja,
+.chip--laranja:hover {
+  border-color: var(--laranja);
+  background: var(--laranja);
+  color: var(--azul-950);
+}
+/* a pílula de filtro ativo, azul cheia, com o x para tirar */
+.chip--ativa {
+  border-color: var(--azul-900);
+  background: var(--azul-900);
+  color: var(--branco);
+  padding-right: 0.625rem;
+}
+.chip--ativa:hover {
+  border-color: var(--azul-700);
+  background: var(--azul-700);
+  color: var(--branco);
+}
+
+/* ── o catálogo: a busca com lupa e as facetas da lateral ─────── */
+.busca-catalogo {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0 0.625rem 0 0.875rem;
+  border: 1px solid var(--linha);
+  border-radius: 999px;
+  background: var(--branco);
+  transition: border-color var(--transicao), box-shadow var(--transicao);
+}
+.busca-catalogo:focus-within {
+  border-color: var(--azul-700);
+  box-shadow: 0 0 0 3px rgba(42, 72, 122, 0.15);
+}
+.busca-catalogo > input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.625rem 0;
+  border: 0;
+  background: transparent;
+  font-family: var(--font-corpo);
+  font-size: 0.9375rem;
+  color: var(--tinta);
+}
+.busca-catalogo > input::placeholder {
+  color: var(--cinza-500);
+}
+.busca-catalogo > input:focus {
+  outline: none;
+}
+.busca-catalogo > button {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  color: var(--tinta-fraca);
+}
+.busca-catalogo > button:hover {
+  background: var(--azul-50);
+  color: var(--azul-900);
+}
+.faceta-opcao {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  width: 100%;
+  padding: 0.375rem 0.375rem;
+  margin-inline: -0.375rem;
+  border-radius: var(--raio-mini);
+  font-size: 0.9375rem;
+  color: var(--tinta);
+  text-align: left;
+  transition: background-color var(--transicao);
+}
+.faceta-opcao:hover {
+  background: var(--azul-50);
+}
+.faceta-caixa {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 1.125rem;
+  height: 1.125rem;
+  border: 1.5px solid var(--cinza-500);
+  border-radius: 4px;
+  color: var(--branco);
+  transition: background-color var(--transicao), border-color var(--transicao);
+}
+.faceta-opcao[aria-pressed="true"] > .faceta-caixa {
+  border-color: var(--azul-700);
+  background: var(--azul-700);
+}
+.faceta-opcao[aria-pressed="true"] {
+  font-weight: 600;
+  color: var(--azul-900);
+}
+.faceta-total {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--cinza-500);
+  font-variant-numeric: tabular-nums;
+}
+.gaveta--clara {
+  background: var(--branco);
+  color: var(--tinta);
+}
+
+/* ── a página do produto: a ficha rápida e a escala de conforto ── */
+.ficha-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem 0.375rem 0.625rem;
+  border: 1px solid var(--linha);
+  border-radius: 999px;
+  background: var(--branco);
+  font-size: 0.8125rem;
+}
+.escala {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--raio);
+  background: var(--azul-50);
+}
+.escala-rotulo {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--tinta-fraca);
+}
+.escala-valor {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--azul-900);
+}
+.escala-trilho {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 3px;
+}
+.escala-passo {
+  position: relative;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--azul-200);
+  font-size: 0;
+}
+.escala-passo--on {
+  background: var(--laranja);
+  box-shadow: 0 0 0 3px rgba(251, 140, 0, 0.25);
+}
+/* a caixa do pedido gruda no alto enquanto a descrição rola */
+@media (min-width: 1024px) {
+  .pedido-fixo {
+    position: sticky;
+    top: 1.5rem;
+  }
+}
+.loja-cartao {
+  display: flex;
+  gap: 0.875rem;
+  align-items: flex-start;
+  padding: 1rem 1.125rem;
+  border-radius: var(--raio);
+  border: 1px solid var(--linha);
+  background: var(--branco);
+}
 
 /* ── régua, moldura, cartão ─────────────────────────────────── */
 .regua {

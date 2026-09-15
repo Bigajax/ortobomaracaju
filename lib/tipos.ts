@@ -42,12 +42,14 @@ export type Produto = {
 
 export type Config = Record<string, string>;
 
-export type Ordenacao = "recentes" | "menor-preco" | "maior-preco";
+export type Ordenacao = "recentes" | "nome-az" | "nome-za" | "menor-preco" | "maior-preco";
 
 export type Filtros = {
   categoria?: string;
   marca?: string[];
   tamanho?: string[];
+  /* facetas por atributo da ficha: { "Nível de Conforto": ["Macio"] } */
+  atributos?: Record<string, string[]>;
   precoMin?: number;
   precoMax?: number;
   busca?: string;
