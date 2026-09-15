@@ -102,7 +102,7 @@ export default async function Home() {
     <>
       <Banners banners={banners} />
 
-      <Garantias />
+      <Garantias linkWhats={whats} />
 
       <Encontre
         circulos={[
