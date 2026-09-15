@@ -59,6 +59,7 @@ export default async function Home() {
       acao: { rotulo: "Ver os colchões", href: "/catalogo/colchoes" },
       segunda: { rotulo: "Pedir no WhatsApp", href: whats, externa: true },
       imagem: fotoDe("colchao-pro-saude-nanolastic")!,
+      naFoto: { nome: peca("colchao-pro-saude-nanolastic")?.nome ?? "Colchão Pró Saúde Nanolastic", href: "/produto/colchao-pro-saude-nanolastic" },
     },
     {
       etiqueta: "Guia da loja",
@@ -67,7 +68,7 @@ export default async function Home() {
       acao: { rotulo: "Fazer o guia", href: "/#escolha" },
       segunda: { rotulo: "Ver todos os colchões", href: "/catalogo/colchoes" },
       imagem: fotoDe("colchao-liberty")!,
-      escuro: true,
+      naFoto: { nome: peca("colchao-liberty")?.nome ?? "Colchão Liberty", href: "/produto/colchao-liberty" },
     },
     {
       etiqueta: "Complete o quarto",
@@ -76,6 +77,7 @@ export default async function Home() {
       acao: { rotulo: "Ver as bases", href: "/catalogo/bases" },
       segunda: { rotulo: "Ver as cabeceiras", href: "/catalogo/cabeceiras" },
       imagem: fotoDe("colchao-absolut-hybrid")!,
+      naFoto: { nome: peca("colchao-absolut-hybrid")?.nome ?? "Colchão Absolut Hybrid", href: "/produto/colchao-absolut-hybrid" },
     },
   ].filter((b) => b.imagem);
 

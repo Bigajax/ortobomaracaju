@@ -834,6 +834,31 @@ body {
   flex: 0 0 100%;
   scroll-snap-align: start;
 }
+/* o slide: azul da marca com um brilho atrás da foto; a foto num cartão com sombra e o chip por cima */
+.banner-slide {
+  background-image: radial-gradient(60% 80% at 78% 50%, rgba(68, 114, 179, 0.45), transparent 70%), linear-gradient(180deg, var(--azul-900), var(--azul-950));
+}
+.banner-foto {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.7);
+  outline: 1px solid rgba(255, 255, 255, 0.12);
+}
+.banner-chip {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  display: block;
+  padding: 0.5rem 0.875rem;
+  border-radius: var(--raio);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: var(--sombra);
+  line-height: 1.25;
+  transition: transform var(--transicao);
+}
+.banner-chip:hover {
+  transform: translateY(-2px);
+}
 .banners-ponto {
   width: 2.5rem;
   height: 4px;
