@@ -1,24 +1,27 @@
 import { Banners, type Banner } from "@/components/Banners";
 import { Certificacoes } from "@/components/Certificacoes";
+import { ConfortoAbas, type AbaConforto } from "@/components/ConfortoAbas";
+import { Encontre } from "@/components/Encontre";
 import { FaixaWhats } from "@/components/FaixaWhats";
 import { Garantias } from "@/components/Garantias";
-import { GuiaColchao } from "@/components/GuiaColchao";
-import { InfoCards } from "@/components/InfoCards";
 import { Loja } from "@/components/Loja";
 import { Numeros } from "@/components/Numeros";
-import { Portas } from "@/components/Portas";
 import { Prateleira } from "@/components/Prateleira";
 import { carregarCatalogo, obterConfig } from "@/lib/dados";
 import { nomeDoTamanho } from "@/lib/filtro";
 import { linkGeral } from "@/lib/whatsapp";
 import { configPadrao, site } from "@/data/site.config";
 
+/* quantos cards cada aba do "Conforto em outro nível" leva para a home */
+const POR_ABA = 8;
+
 /**
- * A home no molde do ortobom.com.br: banners, a faixa de benefícios,
- * as portas com os tiles da marca, as prateleiras por categoria (uma
- * linha cada, com o "tem mais"), os cartões redondos, a loja física, a
- * faixa do WhatsApp e os selos. Tudo montado do catálogo colhido do
- * site da marca; as fotos dos banners são as ambientadas dos destaques.
+ * A home no molde do ortobom.com.br: os banners de campanha, a faixa de
+ * benefícios, os círculos "Encontre o que procura", as abas "Conforto em
+ * outro nível" (uma categoria por vez, com esqueleto na troca), os mais
+ * procurados, os números da loja, a loja física, a faixa do WhatsApp e
+ * os selos. Tudo montado do catálogo colhido do site da marca; as fotos
+ * dos banners são as ambientadas dos destaques.
  */
 export default async function Home() {
   const [{ categorias, produtos, hero }, config] = await Promise.all([carregarCatalogo(), obterConfig()]);
@@ -34,8 +37,19 @@ export default async function Home() {
     .map((h) => ativos.find((p) => p.slug === h.slug))
     .filter((p): p is NonNullable<typeof p> => Boolean(p));
 
-  /* as prateleiras lideram com o que NÃO está nos destaques, para a home não repetir foto */
+  /* as abas lideram com o que NÃO está nos destaques, para a home não repetir foto */
   const inedito = (lista: typeof ativos) => [...lista.filter((p) => !destaques.includes(p)), ...lista.filter((p) => destaques.includes(p))];
+  /* bases e cabeceiras repetem o modelo por cor: a aba mostra um de cada modelo primeiro */
+  const variado = (lista: typeof ativos) => {
+    const vistos = new Set<string>();
+    const primeiros = lista.filter((p) => {
+      const modelo = p.nome.replace(/\s+\S+$/, "");
+      if (vistos.has(modelo)) return false;
+      vistos.add(modelo);
+      return true;
+    });
+    return [...primeiros, ...lista.filter((p) => !primeiros.includes(p))];
+  };
   const colchoes = inedito(da("colchoes"));
   const travesseiros = inedito(da("travesseiros"));
   const bases = inedito(da("bases"));
@@ -43,43 +57,46 @@ export default async function Home() {
 
   const frase = config.frase_hero || configPadrao.frase_hero;
   const fotoDe = (slug: string, n = 0) => peca(slug)?.imagens[n] ?? destaques[0]?.imagens[0];
-  /* o guia recebe só o que precisa de cada colchão: tamanhos (nome) e conforto */
-  const resumoColchoes = da("colchoes").map((p) => ({
-    slug: p.slug,
-    nome: p.nome,
-    tamanhos: [...new Set(p.tamanhos.map(nomeDoTamanho))],
-    conforto: p.atributos?.find((a) => /conforto/i.test(a.chave))?.valor ?? null,
-  }));
   const tamanhosDeCama = new Set(da("colchoes").flatMap((p) => p.tamanhos.map(nomeDoTamanho)).filter((t) => !/berço|berco|infantil|baby/i.test(t)));
+
+  /* a frase do hero vira caligrafia + manchete: "Aracaju," em script, o resto em negrito */
+  const [scriptHero, ...restoHero] = frase.split(/,\s*/);
   const banners: Banner[] = [
     {
-      etiqueta: "Loja Ortobom em Aracaju",
-      titulo: frase,
-      texto: `${colchoes.length} modelos de colchão Ortobom, de molas e de espuma, do solteiro ao king. Escolha aqui, mande no WhatsApp e venha deitar na loja do Grageru antes de fechar.`,
+      script: restoHero.length ? `${scriptHero},` : undefined,
+      titulo: restoHero.length ? restoHero.join(", ") : frase,
+      texto: "De molas e de espuma, do solteiro ao king. Escolha aqui, mande no WhatsApp e venha deitar na loja do Grageru antes de fechar.",
       acao: { rotulo: "Ver os colchões", href: "/catalogo/colchoes" },
-      segunda: { rotulo: "Pedir no WhatsApp", href: whats, externa: true },
       imagem: fotoDe("colchao-pro-saude-nanolastic")!,
+      selo: { grande: String(colchoes.length), pequeno: "modelos de colchão", nota: "venha deitar na loja" },
       naFoto: { nome: peca("colchao-pro-saude-nanolastic")?.nome ?? "Colchão Pró Saúde Nanolastic", href: "/produto/colchao-pro-saude-nanolastic" },
     },
     {
-      etiqueta: "Guia da loja",
-      titulo: "Macio, firme ou híbrido? Duas escolhas e a vitrine responde.",
-      texto: "O tamanho em escala e o jeito que você dorme: o guia filtra os colchões na hora. Depois, a ficha de cada um diz altura, tipo de mola ou espuma e peso suportado.",
-      acao: { rotulo: "Fazer o guia", href: "/#escolha" },
-      segunda: { rotulo: "Ver todos os colchões", href: "/catalogo/colchoes" },
+      script: "Renove",
+      titulo: "seu descanso.",
+      texto: "Macio, firme ou híbrido: a ficha de cada colchão diz a altura, o tipo de mola ou espuma e o peso suportado. O resto você acerta deitando na loja.",
+      acao: { rotulo: "Escolher o colchão", href: "/catalogo/colchoes" },
       imagem: fotoDe("colchao-liberty")!,
+      selo: { grande: String(tamanhosDeCama.size), pequeno: "tamanhos de cama", nota: "do solteiro ao king" },
       naFoto: { nome: peca("colchao-liberty")?.nome ?? "Colchão Liberty", href: "/produto/colchao-liberty" },
     },
     {
-      etiqueta: "Complete o quarto",
-      titulo: "Base e cabeceira no tamanho do seu colchão.",
-      texto: `${bases.length} bases e ${cabeceiras.length} cabeceiras, em corino, linho, veludo e nobuck, do solteiro ao king. A loja monta o conjunto com você.`,
-      acao: { rotulo: "Ver as bases", href: "/catalogo/bases" },
-      segunda: { rotulo: "Ver as cabeceiras", href: "/catalogo/cabeceiras" },
+      script: "Complete",
+      titulo: "o quarto.",
+      texto: "Base e cabeceira no tamanho do seu colchão, em corino, linho, veludo e nobuck. A loja monta o conjunto com você.",
+      acao: { rotulo: "Ver bases e cabeceiras", href: "/catalogo/bases" },
       imagem: fotoDe("colchao-absolut-hybrid")!,
+      selo: { grande: String(bases.length + cabeceiras.length), pequeno: "bases e cabeceiras", nota: "para o seu tamanho" },
       naFoto: { nome: peca("colchao-absolut-hybrid")?.nome ?? "Colchão Absolut Hybrid", href: "/produto/colchao-absolut-hybrid" },
     },
   ].filter((b) => b.imagem);
+
+  const abas = ([
+    { slug: "colchoes", nome: "Colchões", icone: "colchao", produtos: colchoes.slice(0, POR_ABA), total: colchoes.length },
+    { slug: "bases", nome: "Bases", icone: "base", produtos: variado(bases).slice(0, POR_ABA), total: bases.length },
+    { slug: "cabeceiras", nome: "Cabeceiras", icone: "cabeceira", produtos: variado(cabeceiras).slice(0, POR_ABA), total: cabeceiras.length },
+    { slug: "travesseiros", nome: "Travesseiros", icone: "travesseiro", produtos: travesseiros.slice(0, POR_ABA), total: travesseiros.length },
+  ] satisfies AbaConforto[]).filter((a) => a.produtos.length);
 
   return (
     <>
@@ -87,10 +104,8 @@ export default async function Home() {
 
       <Garantias />
 
-      <GuiaColchao colchoes={resumoColchoes} />
-
-      <Portas
-        portas={[
+      <Encontre
+        circulos={[
           { nome: "Colchões", href: "/catalogo/colchoes", imagem: "/marca/cat-colchoes.png", nota: `${colchoes.length} modelos` },
           { nome: "Bases", href: "/catalogo/bases", imagem: "/marca/cat-bases.png", nota: `${bases.length} opções` },
           { nome: "Cabeceiras", href: "/catalogo/cabeceiras", imagem: "/marca/cat-cabeceiras.png", nota: `${cabeceiras.length} opções` },
@@ -98,23 +113,9 @@ export default async function Home() {
         ]}
       />
 
-      <Prateleira id="destaques" titulo="Os mais procurados" subtitulo="A seleção da loja: os colchões que mais saem em Aracaju." href="/catalogo" verTudo="Ver o catálogo" produtos={destaques} categorias={porSlug} prioridade total={ativos.length} nomeDaPorta="produtos" />
+      <ConfortoAbas abas={abas} categorias={porSlug} />
 
-      <InfoCards
-        cards={[
-          { titulo: "Travesseiros", texto: "Látex, visco, pluma e fibra: o par certo para o seu colchão.", acao: "Escolha o seu", href: "/catalogo/travesseiros", imagem: "/marca/round-2.webp" },
-          { titulo: "Bases", texto: "Estilo e funcionalidade se unem na linha de bases para cama.", acao: "Confira as opções", href: "/catalogo/bases", imagem: "/marca/round-1.webp" },
-          { titulo: "Cabeceiras", texto: "Cabeceiras que combinam com o seu estilo e com o conforto do seu quarto.", acao: "Clique e descubra", href: "/catalogo/cabeceiras", imagem: "/marca/round-3.webp" },
-        ]}
-      />
-
-      <Prateleira id="colchoes" titulo="Colchões" subtitulo="Molas ensacadas, Nanolastic, espuma e ortopédico, do solteiro ao king." href="/catalogo/colchoes" verTudo={`Ver os ${colchoes.length}`} produtos={colchoes} categorias={porSlug} nomeDaPorta="colchões" />
-
-      <Prateleira id="travesseiros" titulo="Travesseiros" subtitulo="Látex, visco, pluma e fibra." href="/catalogo/travesseiros" verTudo={`Ver os ${travesseiros.length}`} produtos={travesseiros} categorias={porSlug} nomeDaPorta="travesseiros" />
-
-      <Prateleira id="bases" titulo="Bases" subtitulo="Planas, baú e articuladas, em corino, linho, nobuck e malha." href="/catalogo/bases" verTudo={`Ver as ${bases.length}`} produtos={bases} categorias={porSlug} nomeDaPorta="bases" feminino />
-
-      <Prateleira id="cabeceiras" titulo="Cabeceiras" subtitulo="Linho, veludo, corino e facto, em várias cores." href="/catalogo/cabeceiras" verTudo={`Ver as ${cabeceiras.length}`} produtos={cabeceiras} categorias={porSlug} nomeDaPorta="cabeceiras" feminino />
+      <Prateleira id="destaques" titulo="Os mais procurados" subtitulo="A seleção da loja: os colchões que mais saem em Aracaju." href="/catalogo" verTudo="Ver o catálogo" produtos={destaques} categorias={porSlug} total={ativos.length} nomeDaPorta="produtos" />
 
       <Numeros
         itens={[

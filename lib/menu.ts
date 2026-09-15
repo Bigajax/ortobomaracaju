@@ -125,7 +125,7 @@ export function montarMenu(produtos: Produto[], linkWhats: string): Aba[] {
       colunas: 1,
       itens: [
         { nome: "Os mais procurados", href: "/#destaques", icone: "estrela", nota: "a seleção da loja" },
-        { nome: "Qual colchão é o seu?", href: "/#escolha", icone: "colchao", nota: "por conforto e tamanho" },
+        { nome: "Encontre o que procura", href: "/#escolha", icone: "colchao", nota: "colchões, bases, cabeceiras e travesseiros" },
         { nome: "Catálogo completo", href: "/catalogo", icone: "etiqueta", nota: `${ativos.length} produtos` },
       ],
     },

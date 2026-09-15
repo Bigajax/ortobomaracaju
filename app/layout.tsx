@@ -1,9 +1,18 @@
 import type { Metadata } from "next";
-import { DM_Sans } from "next/font/google";
+import { DM_Sans, Kaushan_Script } from "next/font/google";
 import { site } from "@/data/site.config";
 import "./globals.css";
 
-/* A DM Sans é a família do site da marca: uma só, em todos os pesos. */
+/* A DM Sans é a família do site da marca: uma só, em todos os pesos. A
+   Kaushan Script faz o papel da caligrafia das campanhas da Ortobom
+   ("Renove seu descanso"): só a palavra de abertura do banner. */
+const script = Kaushan_Script({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--fonte-script",
+  display: "swap",
+});
+
 const corpo = DM_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
@@ -36,7 +45,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pt-BR">
-      <body className={`${corpo.variable} antialiased`}>{children}</body>
+      <body className={`${corpo.variable} ${script.variable} antialiased`}>{children}</body>
     </html>
   );
 }

@@ -116,6 +116,7 @@ html {
 body {
   --font-corpo: var(--fonte-corpo), "DM Sans", system-ui, sans-serif;
   --font-display: var(--font-corpo);
+  --font-script: var(--fonte-script), "Kaushan Script", cursive;
   --font-mono: var(--font-corpo);
   color: var(--tinta);
   font-family: var(--font-corpo);
@@ -569,6 +570,33 @@ body {
   opacity: 1;
 }
 /* o card da marca: branco, borda cinza-300, raio 6px, sombra no hover */
+/* O esqueleto de carregamento, com o brilho que corre da esquerda para
+   a direita, como o .skeleton do site da marca (#e0e0e0 sobre #f5f5f5). */
+.esqueleto {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--raio-mini);
+  background: var(--cinza-300);
+}
+.esqueleto::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.65), transparent);
+  animation: esqueleto-brilho 1.2s ease-in-out infinite;
+}
+@keyframes esqueleto-brilho {
+  to {
+    transform: translateX(100%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .esqueleto::after {
+    animation: none;
+  }
+}
+
 .cartao {
   background: var(--sup);
   border: 1px solid var(--risco);
@@ -817,8 +845,13 @@ body {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   O CARROSSEL DE BANNERS. Só CSS: rolagem com snap, um slide por
-   tela, setas e pontos ligados por âncora.
+   O CARROSSEL DE BANNERS, no molde do site da marca: a foto sangra o
+   banner inteiro (1920x450 no desktop, quadrado no celular), o texto
+   senta por cima à esquerda, o selo à direita, e os controles ficam
+   no canto de baixo à esquerda, em caixinhas brancas translúcidas.
+   A foto da marca é quadrada: no desktop ela fica inteira, nítida, na
+   metade direita, e uma cópia borrada e escurecida dela preenche o
+   resto, como se o quarto continuasse. Autoplay de 4s, como lá.
    ───────────────────────────────────────────────────────────── */
 .banners {
   display: flex;
@@ -834,54 +867,167 @@ body {
   flex: 0 0 100%;
   scroll-snap-align: start;
 }
-/* o slide: azul da marca com um brilho atrás da foto; a foto num cartão com sombra e o chip por cima */
 .banner-slide {
-  background-image: radial-gradient(60% 80% at 78% 50%, rgba(68, 114, 179, 0.45), transparent 70%), linear-gradient(180deg, var(--azul-900), var(--azul-950));
-}
-.banner-foto {
-  border-radius: 12px;
+  position: relative;
   overflow: hidden;
-  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.7);
-  outline: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--azul-950);
+  display: flex;
+  flex-direction: column;
 }
-.banner-chip {
+@media (min-width: 1024px) {
+  .banner-slide {
+    display: block;
+    aspect-ratio: 1920 / 450;
+    min-height: 24rem;
+  }
+}
+/* a cópia borrada que vira o quarto */
+.banner-fundo {
   position: absolute;
-  left: 1rem;
+  inset: -6%;
+  filter: blur(28px) brightness(0.45) saturate(1.1);
+  transform: scale(1.1);
+}
+/* a foto nítida: no celular é o quadrado do topo, que se desmancha no
+   chão escuro onde o texto senta; no desktop fica inteira à direita */
+.banner-nitida {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  -webkit-mask-image: linear-gradient(180deg, #000 62%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 62%, transparent 100%);
+}
+@media (min-width: 640px) {
+  .banner-nitida {
+    aspect-ratio: 4 / 3;
+  }
+}
+@media (min-width: 1024px) {
+  .banner-nitida {
+    position: absolute;
+    inset: 0;
+    left: auto;
+    right: 6%;
+    width: auto;
+    aspect-ratio: 1 / 1;
+    height: 100%;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 14%, #000 88%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 14%, #000 88%, transparent);
+  }
+}
+/* o véu que segura o texto: só no desktop, da esquerda */
+.banner-veu {
+  display: none;
+}
+@media (min-width: 1024px) {
+  .banner-veu {
+    display: block;
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(18, 26, 43, 0.92) 0%, rgba(18, 26, 43, 0.75) 32%, rgba(18, 26, 43, 0.1) 60%, rgba(18, 26, 43, 0) 100%);
+  }
+}
+/* o texto: no celular sobe por cima do pé da foto; no desktop enche a altura */
+.banner-miolo {
+  position: relative;
+  z-index: 1;
+  margin-top: -22%;
+  padding-bottom: 4.5rem;
+}
+@media (min-width: 640px) {
+  .banner-miolo {
+    margin-top: -14%;
+  }
+}
+@media (min-width: 1024px) {
+  .banner-miolo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    margin-top: 0;
+    padding-block: 2rem 4rem;
+  }
+}
+/* a caligrafia da campanha */
+.script {
+  font-family: var(--font-script);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+}
+/* o selo: a caixa escura translúcida com o número grande, como o "20% OFF"
+   da marca; no celular no canto de cima da foto, no desktop sobre a foto à direita */
+.banner-selo {
+  position: absolute;
+  z-index: 1;
+  top: 0.875rem;
+  right: 0.875rem;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0.625rem 0.875rem 0.75rem;
+  border-radius: 12px;
+  background: rgba(33, 33, 33, 0.72);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  color: var(--branco);
+  box-shadow: 0 16px 40px -20px rgba(0, 0, 0, 0.8);
+}
+@media (min-width: 1024px) {
+  .banner-selo {
+    top: 50%;
+    right: max(calc(var(--sangria) + 6%), calc((100% - var(--largura)) / 2 + var(--sangria) + 6%));
+    transform: translateY(-50%);
+    padding: 0.875rem 1.25rem 1rem;
+    border-radius: 14px;
+  }
+}
+/* o texto miúdo em pé na borda esquerda, como o "Confira a política" da marca */
+.banner-legal {
+  position: absolute;
+  left: 0.75rem;
+  bottom: 4.5rem;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 0.6875rem;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.02em;
+}
+.banners-controles {
+  position: absolute;
+  left: 0;
+  right: 0;
   bottom: 1rem;
-  display: block;
-  padding: 0.5rem 0.875rem;
-  border-radius: var(--raio);
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: var(--sombra);
-  line-height: 1.25;
-  transition: transform var(--transicao);
+  z-index: 2;
+  pointer-events: none;
 }
-.banner-chip:hover {
-  transform: translateY(-2px);
-}
-.banners-ponto {
-  width: 2.5rem;
-  height: 4px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.45);
-  transition: background-color var(--transicao);
-}
-.banners-ponto:hover,
-.banners-ponto:focus-visible {
-  background: var(--branco);
+.banners-controles > * {
+  pointer-events: auto;
 }
 .banners-seta {
   display: grid;
   place-items: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.9);
-  color: var(--azul-900);
-  box-shadow: var(--sombra);
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--branco);
   transition: background-color var(--transicao);
 }
 .banners-seta:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+.banners-ponto {
+  width: 0.875rem;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.45);
+  transition: background-color var(--transicao), width var(--transicao);
+}
+.banners-ponto[aria-current="true"] {
+  width: 1.75rem;
   background: var(--branco);
 }
 
