@@ -106,6 +106,18 @@ export function CompraProduto({ produto, whatsapp, base }: { produto: Produto; w
         </a>
         <p className="miudo mt-3">A mensagem já vai com o modelo, o tamanho e a quantidade. A loja responde com o valor, as formas de pagamento e combina a entrega ou a retirada em Aracaju.</p>
       </div>
+
+      {/* a barra fixa do celular: o mesmo link, sempre à mão */}
+      <div className="pedido-barra">
+        <span className="min-w-0 flex-1">
+          <span className="block truncate text-[0.8125rem] font-semibold text-azul-900">{produto.nome}</span>
+          <span className="block text-[0.75rem] text-tinta-fraca">{tamanho ? `${nomeDoTamanho(tamanho)}, ` : ""}valor pelo WhatsApp</span>
+        </span>
+        <a href={link} target="_blank" rel="noreferrer" className="btn btn--whats btn--pequeno shrink-0">
+          <Icone nome="whats" className="h-[1.125rem] w-[1.125rem]" />
+          Pedir
+        </a>
+      </div>
     </div>
   );
 }

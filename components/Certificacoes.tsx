@@ -13,10 +13,10 @@ export function Certificacoes() {
       <h2 id="selos-titulo" className="secao text-center">
         Prêmios e certificações recebidas pela Ortobom
       </h2>
-      <ul className="faixa-scroll sangra mt-6 flex items-center gap-6 overflow-x-auto pb-2 lg:mx-0 lg:grid lg:grid-cols-8 lg:gap-4 lg:overflow-visible lg:px-0">
+      <ul className="faixa-scroll sangra mt-6 flex items-center gap-3 overflow-x-auto pb-2 lg:mx-0 lg:grid lg:grid-cols-8 lg:gap-4 lg:overflow-visible lg:px-0">
         {SELOS.map((n) => (
-          <li key={n} className="flex h-20 w-[9.5rem] shrink-0 items-center justify-center lg:w-auto">
-            <Image src={`/marca/cert-${n}.webp`} alt="" width={150} height={80} className="h-16 w-auto object-contain" />
+          <li key={n} className="flex h-20 w-[7.5rem] shrink-0 items-center justify-center rounded-[var(--raio)] border border-linha lg:w-auto lg:border-0">
+            <Image src={`/marca/cert-${n}.webp`} alt="" width={150} height={80} className="h-14 w-auto object-contain lg:h-16" />
           </li>
         ))}
       </ul>

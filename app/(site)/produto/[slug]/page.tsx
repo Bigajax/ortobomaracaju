@@ -91,7 +91,7 @@ export default async function PaginaProduto({ params }: Props) {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <div className="miolo pb-20 pt-6 lg:pt-8">
+      <div className="miolo pb-28 pt-6 lg:pb-20 lg:pt-8">
         <nav aria-label="Você está em" className="miudo mb-5">
           <Link href="/" className="hover:text-azul-700">
             Início

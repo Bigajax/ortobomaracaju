@@ -48,7 +48,7 @@ export function Cabecalho({ linkWhats, aviso, menu }: { linkWhats: string; aviso
   return (
     <header className="relative z-50 [overflow-x:clip]">
       {frases.length ? (
-        <p className="escuro aviso text-[0.8125rem] font-medium" aria-live="off">
+        <p className="escuro aviso hidden text-[0.8125rem] font-medium lg:block" aria-live="off">
           {frases.map((f, i) => (
             <span key={i} className="aviso-item" style={{ "--i": i } as React.CSSProperties}>
               {f}
@@ -111,6 +111,17 @@ export function Cabecalho({ linkWhats, aviso, menu }: { linkWhats: string; aviso
             </button>
           </label>
         </form>
+
+        {/* no celular, a linha da cidade logo abaixo da busca, como a
+            "Aracaju - SE" do site da marca: aqui é a loja, com o bairro */}
+        <Link href="/#loja" className="escuro flex items-center gap-2 px-[var(--sangria)] py-2.5 text-[0.8125rem] text-branco lg:hidden">
+          <Icone nome="pino" className="h-4 w-4 shrink-0 text-laranja" peso={1.8} />
+          <span className="min-w-0 flex-1 truncate">
+            <span className="font-semibold">Aracaju, Grageru</span>
+            <span className="text-azul-300"> · Av. Tancredo Neves, 746</span>
+          </span>
+          <Icone nome="seta" className="h-4 w-4 shrink-0 text-azul-300" peso={2} />
+        </Link>
 
         {/* a fila de portas, no azul mais escuro do topo: as categorias com o
             número de cada uma à esquerda, a loja empurrada para a direita */}

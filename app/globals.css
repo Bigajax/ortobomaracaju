@@ -731,6 +731,26 @@ body {
     top: 1.5rem;
   }
 }
+/* no celular o pedido fica grudado no pé da tela, como o "Comprar" da marca */
+.pedido-barra {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem var(--sangria) calc(0.625rem + env(safe-area-inset-bottom, 0px));
+  background: var(--branco);
+  border-top: 1px solid var(--linha);
+  box-shadow: 0 -12px 30px -18px rgba(18, 26, 43, 0.45);
+}
+@media (min-width: 1024px) {
+  .pedido-barra {
+    display: none;
+  }
+}
 .loja-cartao {
   display: flex;
   gap: 0.875rem;
@@ -1227,12 +1247,15 @@ body {
   gap: 0.75rem;
   overflow-x: auto;
   padding-block: 1rem 0.5rem;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--sangria);
 }
 .garantia {
   display: flex;
   align-items: center;
   gap: 0.875rem;
-  min-width: 17rem;
+  min-width: min(20rem, 82vw);
+  scroll-snap-align: start;
   padding: 0.875rem 1rem;
   border: 1px solid var(--linha);
   border-radius: var(--raio);
@@ -1331,6 +1354,21 @@ body {
 .banners-ponto[aria-current="true"] {
   width: 1.75rem;
   background: var(--branco);
+}
+
+/* os cartões de atendimento do rodapé no celular: contorno claro sobre o azul */
+.rodape-cartao {
+  display: flex;
+  gap: 0.875rem;
+  align-items: flex-start;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--raio);
+  transition: border-color var(--transicao), background-color var(--transicao);
+}
+.rodape-cartao:hover {
+  border-color: var(--laranja);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 /* a sanfona do rodapé no celular */

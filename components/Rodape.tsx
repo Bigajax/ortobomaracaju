@@ -55,10 +55,34 @@ export function Rodape({
             <span className="border-l border-white/20 pl-3 text-[0.8125rem] font-semibold uppercase tracking-[0.08em] text-azul-300">Aracaju</span>
           </Link>
           <p className="mt-4 max-w-[34ch] text-[0.9375rem] text-azul-200">{site.posicionamento}. Loja franqueada, no Grageru.</p>
-          <a href={linkWhats} target="_blank" rel="noreferrer" className="btn btn--whats mt-5">
+          <a href={linkWhats} target="_blank" rel="noreferrer" className="btn btn--whats mt-5 hidden sm:inline-flex">
             <Icone nome="whats" className="h-[1.125rem] w-[1.125rem]" />
             (79) 99160-4707
           </a>
+
+          {/* no celular, os dois cartões de atendimento do rodapé da marca: aqui a loja e o manual */}
+          <div className="mt-5 grid gap-3 sm:hidden">
+            <a href={linkWhats} target="_blank" rel="noreferrer" className="rodape-cartao">
+              <Icone nome="whats" className="h-7 w-7 shrink-0 text-[#25d366]" />
+              <span className="min-w-0">
+                <span className="block text-[0.9375rem] font-bold text-branco">Falar com a loja</span>
+                <span className="block text-[0.8125rem] text-azul-200">Orçamento, tamanho e entrega no WhatsApp (79) 99160-4707.</span>
+                <span className="mt-2 flex items-center gap-1 text-[0.875rem] font-semibold text-branco">
+                  Chamar agora <Icone nome="seta" className="h-4 w-4" peso={2} />
+                </span>
+              </span>
+            </a>
+            <a href="https://www.ortobom.com.br/i/manual-do-sono" target="_blank" rel="noreferrer" className="rodape-cartao">
+              <Icone nome="colchao" className="h-7 w-7 shrink-0 text-laranja" peso={1.4} />
+              <span className="min-w-0">
+                <span className="block text-[0.9375rem] font-bold text-branco">Manual do sono Ortobom</span>
+                <span className="block text-[0.8125rem] text-azul-200">Como escolher e cuidar do colchão, pela marca.</span>
+                <span className="mt-2 flex items-center gap-1 text-[0.875rem] font-semibold text-branco">
+                  Acesse e confira <Icone nome="seta" className="h-4 w-4" peso={2} />
+                </span>
+              </span>
+            </a>
+          </div>
         </div>
 
         <Bloco titulo="Catálogo">

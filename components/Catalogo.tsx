@@ -155,7 +155,7 @@ export function Catalogo({
 
         <div className="min-w-0">
           {/* a barra: busca, contagem, ordem, e no celular o botão da gaveta */}
-          <div className="flex flex-wrap items-center gap-3 border-b border-linha pb-4">
+          <div className="flex flex-wrap items-center gap-3 rounded-[var(--raio)] border border-linha p-3 sm:rounded-none sm:border-0 sm:border-b sm:p-0 sm:pb-4">
             <label className="busca-catalogo min-w-0 flex-1 sm:max-w-[22rem]">
               <Icone nome="lupa" className="h-5 w-5 shrink-0 text-azul-700" />
               <span className="sr-only">Buscar por modelo, linha ou tamanho</span>
@@ -212,9 +212,10 @@ export function Catalogo({
           <div className="pt-6">
             {lista.length ? (
               <>
-                <div className={`grid grid-cols-2 gap-3 sm:gap-4 ${temPainel ? "md:grid-cols-3 xl:grid-cols-4" : "sm:grid-cols-3 lg:grid-cols-4"} lg:gap-5`}>
+                {/* uma coluna no celular, como o catálogo da marca: o card inteiro na largura do dedo */}
+                <div className={`grid grid-cols-1 gap-4 sm:grid-cols-2 ${temPainel ? "md:grid-cols-3 xl:grid-cols-4" : "sm:grid-cols-3 lg:grid-cols-4"} lg:gap-5`}>
                   {lista.slice(0, visiveis).map((p, i) => (
-                    <CardProduto key={p.id} produto={p} categoria={categorias.find((c) => c.slug === p.categoria_slug)} prioridade={i < 4} tamanhos="(max-width: 640px) 46vw, (max-width: 1024px) 30vw, 20vw" />
+                    <CardProduto key={p.id} produto={p} categoria={categorias.find((c) => c.slug === p.categoria_slug)} prioridade={i < 2} tamanhos="(max-width: 640px) 92vw, (max-width: 1024px) 30vw, 20vw" />
                   ))}
                 </div>
                 {visiveis < lista.length ? (
