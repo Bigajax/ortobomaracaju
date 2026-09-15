@@ -20,7 +20,7 @@ const corpo = DM_Sans({
   display: "swap",
 });
 
-const TITULO = "Ortobom Aracaju — Colchões, bases, cabeceiras e travesseiros";
+const TITULO = "Ortobom Aracaju: colchões, bases, cabeceiras e travesseiros";
 const DESCRICAO = `Loja Ortobom em Aracaju, na ${site.endereco}. Colchões de molas e espuma, bases, cabeceiras e travesseiros com pedido e orçamento pelo WhatsApp.`;
 
 export const metadata: Metadata = {
@@ -38,6 +38,13 @@ export const metadata: Metadata = {
     title: TITULO,
     description: site.posicionamento,
     images: [{ url: "/og/site.jpg", width: 1200, height: 630, alt: "Ortobom Aracaju" }],
+  },
+  /* o WhatsApp lê o og:image; o X e o Telegram, o twitter:card */
+  twitter: {
+    card: "summary_large_image",
+    title: TITULO,
+    description: site.posicionamento,
+    images: ["/og/site.jpg"],
   },
   alternates: { canonical: "/" },
 };
