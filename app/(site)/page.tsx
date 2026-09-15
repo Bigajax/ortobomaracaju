@@ -69,7 +69,6 @@ export default async function Home() {
       acao: { rotulo: "Ver os colchões", href: "/catalogo/colchoes" },
       imagem: fotoDe("colchao-pro-saude-nanolastic")!,
       selo: { grande: String(colchoes.length), pequeno: "modelos de colchão", nota: "venha deitar na loja" },
-      naFoto: { nome: peca("colchao-pro-saude-nanolastic")?.nome ?? "Colchão Pró Saúde Nanolastic", href: "/produto/colchao-pro-saude-nanolastic" },
     },
     {
       script: "Renove",
@@ -78,7 +77,6 @@ export default async function Home() {
       acao: { rotulo: "Escolher o colchão", href: "/catalogo/colchoes" },
       imagem: fotoDe("colchao-liberty")!,
       selo: { grande: String(tamanhosDeCama.size), pequeno: "tamanhos de cama", nota: "do solteiro ao king" },
-      naFoto: { nome: peca("colchao-liberty")?.nome ?? "Colchão Liberty", href: "/produto/colchao-liberty" },
     },
     {
       script: "Complete",
@@ -87,7 +85,6 @@ export default async function Home() {
       acao: { rotulo: "Ver bases e cabeceiras", href: "/catalogo/bases" },
       imagem: fotoDe("colchao-absolut-hybrid")!,
       selo: { grande: String(bases.length + cabeceiras.length), pequeno: "bases e cabeceiras", nota: "para o seu tamanho" },
-      naFoto: { nome: peca("colchao-absolut-hybrid")?.nome ?? "Colchão Absolut Hybrid", href: "/produto/colchao-absolut-hybrid" },
     },
   ].filter((b) => b.imagem);
 

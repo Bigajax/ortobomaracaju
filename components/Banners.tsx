@@ -15,8 +15,6 @@ export type Banner = {
   imagem: Imagem;
   /* o selo escuro à direita: número grande, uma linha embaixo, uma nota */
   selo?: { grande: string; pequeno: string; nota?: string };
-  /* a peça que está na foto, para o rodapé do banner */
-  naFoto?: { nome: string; href: string };
 };
 
 const INTERVALO = 4000;
@@ -120,11 +118,6 @@ export function Banners({ banners }: { banners: Banner[] }) {
               </div>
             </div>
 
-            {b.naFoto ? (
-              <p className="banner-legal hidden lg:block">
-                Na foto: {b.naFoto.nome}. Fotos ilustrativas da Ortobom; o colchão não inclui a base.
-              </p>
-            ) : null}
           </article>
         ))}
       </div>

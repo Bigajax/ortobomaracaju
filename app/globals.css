@@ -1111,17 +1111,6 @@ body {
   }
 }
 
-/* o texto miúdo em pé na borda esquerda, como o "Confira a política" da marca */
-.banner-legal {
-  position: absolute;
-  left: 0.75rem;
-  bottom: 6rem;
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  font-size: 0.6875rem;
-  color: rgba(255, 255, 255, 0.7);
-  letter-spacing: 0.02em;
-}
 .banners-controles {
   position: absolute;
   left: 0;
