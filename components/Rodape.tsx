@@ -140,7 +140,7 @@ export function Rodape({
             © {new Date().getFullYear()} Ortobom Aracaju, loja franqueada. Ortobom é marca registrada da Ortobom; fotos e informações dos produtos são da marca. {PREVIA ? "Prévia da vitrine, ainda não é a loja." : ""}
           </p>
           <a
-            href="https://rafaelrazeira.com.br/landing-page"
+            href="https://rafaelrazeira.com.br/vitrine-digital"
             target="_blank"
             rel="noreferrer"
             aria-label="Vitrine feita por Rafael Razeira Estúdio"
